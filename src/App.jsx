@@ -1,13 +1,13 @@
 import './App.css'
 import useFetch from './useFetch'
+import fetchData from './FetchData'
+import { Suspense } from 'react'
 
-function App() {
+ //  const { data, loading, error, handleRequest } = useFetch("https://jsonplaceholder.typicode.com/users")
 
-  const { data, loading, error, handleRequest } = useFetch("https://jsonplaceholder.typicode.com/users")
 
-  return (
-    <>
-
+  /*
+  
       <div className='App'>
         <button onClick={handleRequest}>Cancel</button>
         <div className='card'>
@@ -18,7 +18,28 @@ function App() {
           </ul>
         </div>
       </div>
+      */
 
+
+const apiData = fetchData("https://jsonplaceholder.typicode.com/users")
+
+
+function App() {
+  
+  const data = apiData.read()
+
+ 
+  return (
+    <>
+      <div className='App'>
+        <Suspense fallback={<div>Loading...</div>}>
+          <ul className='card'>
+            {data?.map((user) => (
+              <li key={user.id}>{user.name}</li>
+            ))}
+          </ul>
+        </Suspense>
+      </div>
     </>
   )
 }
